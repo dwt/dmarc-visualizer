@@ -6,9 +6,10 @@ services:
   parsedmarc:
     build: ./parsedmarc/
     volumes:
-      - ./files:/input:ro
-      - ./output_files:/output
-    command: parsedmarc -c /parsedmarc.ini /input/*
+      - ./parsedmarc/parsedmarc.ini:/parsedmarc.ini:ro
+      - ./parsedmarc/GeoLite2-Country.mmdb:/usr/share/GeoIP/GeoLite2-Country.mmdb:ro
+      - ./parsedmarc/output_files:/output
+    command: wait-for elasticsearch:9200 -t 60 -- venv/bin/parsedmarc -c /parsedmarc.ini
     depends_on:
       - elasticsearch
 

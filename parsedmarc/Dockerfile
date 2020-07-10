@@ -1,7 +1,11 @@
 FROM python:alpine
 
-RUN apk add build-base libxml2-dev libxslt-dev \
-    && pip install parsedmarc
+RUN wget https://raw.githubusercontent.com/eficode/wait-for/master/wait-for -P /usr/local/bin/ \
+    && chmod a+x /usr/local/bin/wait-for
 
-COPY parsedmarc.ini /
-#COPY GeoLite2-Country.mmdb /usr/share/GeoIP/GeoLite2-Country.mmdb
+RUN apk upgrade \
+    && apk --no-cache add build-base libxml2-dev libxslt-dev
+
+RUN python -m venv venv \
+    && venv/bin/pip install parsedmarc \
+    && rm -rf /root/.cache/
