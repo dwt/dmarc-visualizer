@@ -1,4 +1,7 @@
 version: '3.7'
+secrets:
+  grafana_admin_password:
+    file: secrets/grafana_admin_password.txt
 services:
   parsedmarc:
     build: ./parsedmarc/
@@ -14,10 +17,17 @@ services:
     environment:
       - discovery.type=single-node
 
+  # @see https://grafana.com/docs/grafana/latest/installation/docker/
+  # @see https://grafana.com/docs/grafana/latest/installation/configure-docker/
   grafana:
-    build: ./grafana/
+    image: grafana/grafana:latest
+    volumes:
+      - ./grafana/data:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/:ro
     ports:
       - 3000:3000
+    secrets:
+      - grafana_admin_password
     environment:
       GF_INSTALL_PLUGINS: grafana-piechart-panel,grafana-worldmap-panel
-      GF_AUTH_ANONYMOUS_ENABLED: 'true'
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /var/run/grafana_admin_password
