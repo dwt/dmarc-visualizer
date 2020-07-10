@@ -12,11 +12,18 @@ services:
     depends_on:
       - elasticsearch
 
+  # @see https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.0
+    # There seems to be no :latest image - so a version has to be specified explicitly
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.8.0
+    # Open distribution doesn't seem to work? Not sure why
+    # image: amazon/opendistro-for-elasticsearch
     environment:
       - discovery.type=single-node
-
+      - "ES_JAVA_OPTS=-Xms200m -Xmx200m"
+    volumes:
+      - ./elasticsearch:/usr/share/elasticsearch/data
+  
   # @see https://grafana.com/docs/grafana/latest/installation/docker/
   # @see https://grafana.com/docs/grafana/latest/installation/configure-docker/
   grafana:
