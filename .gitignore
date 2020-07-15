@@ -1,6 +1,7 @@
 /elasticsearch
 /grafana/data
 /grafana/provisioning/dashboards/Grafana-DMARC_Reports.json
+/parsedmarc/parsedmarc.ini
 /parsedmarc/output_files
 /parsedmarc/GeoLite2-Country*
 /secrets
