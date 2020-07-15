@@ -2,6 +2,7 @@ version: '3.7'
 secrets:
   grafana_admin_password:
     file: secrets/grafana_admin_password.txt
+
 services:
   parsedmarc:
     build: ./parsedmarc/
