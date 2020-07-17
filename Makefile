@@ -46,9 +46,9 @@ fix-permissions:
 .PHONY:
 update-parsedmarc: fix-permissions
 	# update dashboard definition for grafana
-    curl --silent $(parsedmarc_dashboard_url) --output $(dashboard_path)
+	curl --silent $(parsedmarc_dashboard_url) --output $(dashboard_path)
 	# update maxmind geoip database
-    curl --silent $(geoip_city_url) | tar -xzvf - --directory parsedmarc --strip-components 1 '*/GeoLite2-Country.mmdb'
+	curl --silent $(geoip_city_url) | tar -xzvf - --directory parsedmarc --strip-components 1 '*/GeoLite2-Country.mmdb'
 	# Updating parsedmarc.ini
 	@echo "`cat parsedmarc/parsedmarc.ini.tpl`" \
 		| sed -e "s/MAIL_SERVER_USER/$(MAIL_SERVER_USER)/g" \
@@ -57,7 +57,7 @@ update-parsedmarc: fix-permissions
 		| sed -e "s/DMARC_REPORT_TARGET_EMAIL/$(DMARC_REPORT_TARGET_EMAIL)/g" \
 	> parsedmarc/parsedmarc.ini
 	# recreate container
-    $(CONTAINER_RUNNER) build --pull --no-cache parsedmarc
+	$(CONTAINER_RUNNER) build --pull --no-cache parsedmarc
 
 .PHONY:
 update-all-containers: update-help fix-permissions # update-parsedmarc
