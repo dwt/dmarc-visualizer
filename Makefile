@@ -14,23 +14,25 @@ geoip_city_url = "https://download.maxmind.com/app/geoip_download?edition_id=Geo
 parsedmarc_dashboard_url = "https://raw.githubusercontent.com/domainaware/parsedmarc/master/grafana/Grafana-DMARC_Reports.json"
 dashboard_path = grafana/provisioning/dashboards/Grafana-DMARC_Reports.json
 
-CONTAINER_RUNNER = docker-compose
+# Ease switching to podman
+DOCKER = docker
+DOCKER_COMPOSE = docker-compose
 
 .PHONY: # Trigger dmarc parsing using this, probably from a cron job
 parsedmarc:
-	$(CONTAINER_RUNNER) start parsedmarc
+	$(DOCKER_COMPOSE) start parsedmarc
 
 .PHONY:
 start:
-	$(CONTAINER_RUNNER) up -d
+	$(DOCKER_COMPOSE) up -d
 
 .PHONY:
 stop:
-	$(CONTAINER_RUNNER) down
+	$(DOCKER_COMPOSE) down
 
 .PHONY:
 logs:
-	$(CONTAINER_RUNNER) logs --follow
+	$(DOCKER_COMPOSE) logs --follow
 
 .PHONY:
 update-help:
@@ -42,6 +44,9 @@ fix-permissions:
 	# FIXME need to ensure all permissions are as expected inside the containers?
 	# https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
 	# fixing group ids with chgrp may be the right approach?
+	# only required on linux with rootless podman
+	which podman && podman unshare chown 472:472 -R grafana/data
+	which podman && podman unshare chown 472:472 -R grafana/provisioning
 
 .PHONY:
 update-parsedmarc: fix-permissions
@@ -50,19 +55,20 @@ update-parsedmarc: fix-permissions
 	# update maxmind geoip database
 	curl --silent $(geoip_city_url) | tar -xzvf - --directory parsedmarc --strip-components 1 '*/GeoLite2-Country.mmdb'
 	# Updating parsedmarc.ini
-	@echo "`cat parsedmarc/parsedmarc.ini.tpl`" \
+	@cat parsedmarc/parsedmarc.ini.tpl \
 		| sed -e "s/MAIL_SERVER_USER/$(MAIL_SERVER_USER)/g" \
 		| sed -e "s/MAIL_SERVER_PASS/$(MAIL_SERVER_PASS)/g" \
 		| sed -e "s/MAIL_SERVER/$(MAIL_SERVER)/g" \
 		| sed -e "s/DMARC_REPORT_TARGET_EMAIL/$(DMARC_REPORT_TARGET_EMAIL)/g" \
-	> parsedmarc/parsedmarc.ini
+		> parsedmarc/parsedmarc.ini
 	# recreate container
-	$(CONTAINER_RUNNER) build --pull --no-cache parsedmarc
+	# $(DOCKER_COMPOSE) build --pull --no-cache parsedmarc
+	$(DOCKER_COMPOSE) build --pull
 
 .PHONY:
 update-all-containers: update-help fix-permissions # update-parsedmarc
 	# update container images
-	$(CONTAINER_RUNNER) pull elasticsearch grafana
+	$(DOCKER_COMPOSE) pull elasticsearch grafana
 
 .PHONY:
 clean:
