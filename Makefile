@@ -17,6 +17,9 @@ dashboard_path = grafana/provisioning/dashboards/Grafana-DMARC_Reports.json
 # Ease switching to podman
 DOCKER_COMPOSE = docker-compose
 
+.DEFAULT:
+just-run-the-damn-thing: update-parsedmarc start
+	
 .PHONY: # Trigger dmarc parsing using this, probably from a cron job
 parsedmarc:
 	$(DOCKER_COMPOSE) start parsedmarc
