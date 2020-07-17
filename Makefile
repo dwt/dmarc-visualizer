@@ -43,22 +43,21 @@ fix-permissions:
 	# https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
 	# fixing group ids with chgrp may be the right approach?
 
-
 .PHONY:
 update-parsedmarc: fix-permissions
 	# update dashboard definition for grafana
-	curl --silent $(parsedmarc_dashboard_url) --output $(dashboard_path)
+    curl --silent $(parsedmarc_dashboard_url) --output $(dashboard_path)
 	# update maxmind geoip database
-	curl --silent $(geoip_city_url) | tar -xzvf - --directory parsedmarc --strip-components 1 '*/GeoLite2-Country.mmdb'
+    curl --silent $(geoip_city_url) | tar -xzvf - --directory parsedmarc --strip-components 1 '*/GeoLite2-Country.mmdb'
 	# Updating parsedmarc.ini
 	@echo "`cat parsedmarc/parsedmarc.ini.tpl`" \
-	| replace MAIL_SERVER_USER "$(MAIL_SERVER_USER)" \
-		MAIL_SERVER_PASS "$(MAIL_SERVER_PASS)" \
-		MAIL_SERVER "$(MAIL_SERVER)" \
-		DMARC_REPORT_TARGET_EMAIL "$(DMARC_REPORT_TARGET_EMAIL)" \
+		| sed -e "s/MAIL_SERVER_USER/$(MAIL_SERVER_USER)/g" \
+		| sed -e "s/MAIL_SERVER_PASS/$(MAIL_SERVER_PASS)/g" \
+		| sed -e "s/MAIL_SERVER/$(MAIL_SERVER)/g" \
+		| sed -e "s/DMARC_REPORT_TARGET_EMAIL/$(DMARC_REPORT_TARGET_EMAIL)/g" \
 	> parsedmarc/parsedmarc.ini
 	# recreate container
-	$(CONTAINER_RUNNER) build --pull --no-cache parsedmarc
+    $(CONTAINER_RUNNER) build --pull --no-cache parsedmarc
 
 .PHONY:
 update-all-containers: update-help fix-permissions # update-parsedmarc
