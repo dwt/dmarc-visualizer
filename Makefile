@@ -63,13 +63,12 @@ update-parsedmarc: fix-permissions
 		parsedmarc/template.py parsedmarc/parsedmarc.ini.tpl \
 		> parsedmarc/parsedmarc.ini
 	# recreate container
-	# $(DOCKER_COMPOSE) build --pull --no-cache parsedmarc
 	$(DOCKER_COMPOSE) build --pull
 
 .PHONY:
-update-all-containers: update-help fix-permissions # update-parsedmarc
+update-all-containers: update-help fix-permissions
 	# update container images
-	$(DOCKER_COMPOSE) pull elasticsearch grafana
+	$(DOCKER_COMPOSE) pull
 
 .PHONY:
 clean:
