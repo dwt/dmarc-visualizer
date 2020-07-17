@@ -30,7 +30,7 @@ services:
       - ./grafana/data:/var/lib/grafana
       - ./grafana/provisioning/:/etc/grafana/provisioning/:ro
       # using standard file mapping instead of secret here, because podman-compose doesn't know about secrets
-      - ./secrets/grafana_admin_password.txt/:/var/run/grafana_admin_password:ro
+      - ./secrets/grafana_admin_password.txt:/var/run/grafana_admin_password:ro
     ports:
       - 3000:3000
     environment:
