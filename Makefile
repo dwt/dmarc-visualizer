@@ -45,8 +45,8 @@ fix-permissions:
 	# https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
 	# fixing group ids with chgrp may be the right approach?
 	# only required on linux with rootless podman
-	which podman && podman unshare chown 472:472 -R grafana/data
-	which podman && podman unshare chown 472:472 -R grafana/provisioning
+	-which podman && podman unshare chown 472:472 -R grafana/data
+	-which podman && podman unshare chown 472:472 -R grafana/provisioning
 
 .PHONY:
 update-parsedmarc: fix-permissions
