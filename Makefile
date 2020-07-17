@@ -40,13 +40,7 @@ update-help:
 
 .PHONY:
 fix-permissions:
-	# FIXME need to ensure all the non read-only mounted directory have correct GID rw access to work inside the container
-	# FIXME need to ensure all permissions are as expected inside the containers?
-	# https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html
-	# fixing group ids with chgrp may be the right approach?
-	# only required on linux with rootless podman
 	-which podman && podman unshare chown 472:472 -R grafana/data
-	-which podman && podman unshare chown 472:472 -R grafana/provisioning
 
 .PHONY:
 update-parsedmarc: fix-permissions
