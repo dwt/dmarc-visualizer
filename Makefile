@@ -55,11 +55,9 @@ update-parsedmarc: fix-permissions
 	# update maxmind geoip database
 	curl --silent $(geoip_city_url) | tar -xzvf - --directory parsedmarc --strip-components 1 '*/GeoLite2-Country.mmdb'
 	# Updating parsedmarc.ini
-	@cat parsedmarc/parsedmarc.ini.tpl \
-		| sed -e "s/MAIL_SERVER_USER/$(MAIL_SERVER_USER)/g" \
-		| sed -e "s/MAIL_SERVER_PASS/$(MAIL_SERVER_PASS)/g" \
-		| sed -e "s/MAIL_SERVER/$(MAIL_SERVER)/g" \
-		| sed -e "s/DMARC_REPORT_TARGET_EMAIL/$(DMARC_REPORT_TARGET_EMAIL)/g" \
+	MAIL_SERVER="$(MAIL_SERVER)" MAIL_SERVER_USER="$(MAIL_SERVER_USER)" \
+	MAIL_SERVER_PASS="$(MAIL_SERVER_PASS)" DMARC_REPORT_TARGET_EMAIL="$(DMARC_REPORT_TARGET_EMAIL)" \
+		parsedmarc/template.py parsedmarc/parsedmarc.ini.tpl \
 		> parsedmarc/parsedmarc.ini
 	# recreate container
 	# $(DOCKER_COMPOSE) build --pull --no-cache parsedmarc
