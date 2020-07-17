@@ -44,10 +44,6 @@ logs:
 	$(DOCKER_COMPOSE) logs --follow
 
 .PHONY:
-update-help:
-	# elasticsearch has a hardcoded version in the dockerfile - update that first!
-
-.PHONY:
 fix-permissions:
 	-which podman && podman unshare chown 472:472 -R grafana/data
 
@@ -64,6 +60,10 @@ update-parsedmarc: fix-permissions
 		> parsedmarc/parsedmarc.ini
 	# recreate container
 	$(DOCKER_COMPOSE) build --pull
+
+.PHONY:
+update-help:
+	# elasticsearch has a hardcoded version in the dockerfile - update that first!
 
 .PHONY:
 update-all-containers: update-help fix-permissions
