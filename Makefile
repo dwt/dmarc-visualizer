@@ -45,8 +45,8 @@ logs:
 
 .PHONY:
 fix-permissions:
-	-which podman && podman unshare chown 472:472 -R grafana/data
-	-which podman && podman unshare chgrp 1000 elasticsearch
+	-which podman && podman unshare chown -R 472:472 grafana/data
+	-which podman && podman unshare chown -R 1000:1000 elasticsearch
 
 .PHONY:
 update-parsedmarc: fix-permissions
