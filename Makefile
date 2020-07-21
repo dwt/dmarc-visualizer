@@ -25,7 +25,7 @@ podman:
 	# switch to using podman-compose
 	$(eval DOCKER_COMPOSE="podman-compose" )
 	# ensure podman is able to resolve dns queries
-	export GODEBUG=netdns=go 
+	$(eval export GODEBUG:='netdns=go' )
 
 .PHONY: # Trigger dmarc parsing using this, probably from a cron job
 parsedmarc:
