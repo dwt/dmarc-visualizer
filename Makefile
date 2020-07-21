@@ -1,18 +1,18 @@
 # Maxmind account credentials to download geoip database
-MAXMIND_ACCOUNT_ID = $(shell cat secrets/maxmind_account_id.txt)
-MAXMIND_LICENSE_KEY = $(shell cat secrets/maxmind_license_key.txt)
+MAXMIND_ACCOUNT_ID := $(shell cat secrets/maxmind_account_id.txt)
+MAXMIND_LICENSE_KEY := $(shell cat secrets/maxmind_license_key.txt)
 
 # Mail server credentials for the mailbox that holds all the dmarc reports (rua and ruf)
-MAIL_SERVER = $(shell cat secrets/mail_server.txt)
-MAIL_SERVER_USER = $(shell cat secrets/mail_server_user.txt)
-MAIL_SERVER_PASS = $(shell cat secrets/mail_server_pass.txt)
-DMARC_REPORT_TARGET_EMAIL = $(shell cat secrets/dmarc_report_target_email.txt)
+MAIL_SERVER := $(shell cat secrets/mail_server.txt)
+MAIL_SERVER_USER := $(shell cat secrets/mail_server_user.txt)
+MAIL_SERVER_PASS := $(shell cat secrets/mail_server_pass.txt)
+DMARC_REPORT_TARGET_EMAIL := $(shell cat secrets/dmarc_report_target_email.txt)
 
 # These should not need to change
-geoip_city_url = "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&account_id=$(MAXMIND_ACCOUNT_ID)&license_key=$(MAXMIND_LICENSE_KEY)&suffix=tar.gz"
+geoip_city_url := "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&account_id=$(MAXMIND_ACCOUNT_ID)&license_key=$(MAXMIND_LICENSE_KEY)&suffix=tar.gz"
 
-parsedmarc_dashboard_url = "https://raw.githubusercontent.com/domainaware/parsedmarc/master/grafana/Grafana-DMARC_Reports.json"
-dashboard_path = grafana/provisioning/dashboards/Grafana-DMARC_Reports.json
+parsedmarc_dashboard_url := "https://raw.githubusercontent.com/domainaware/parsedmarc/master/grafana/Grafana-DMARC_Reports.json"
+dashboard_path := grafana/provisioning/dashboards/Grafana-DMARC_Reports.json
 
 # Ease switching to podman
 DOCKER_COMPOSE = docker-compose
