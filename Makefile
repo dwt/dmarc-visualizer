@@ -64,7 +64,7 @@ update-parsedmarc: fix-permissions
 
 .PHONY:
 update-help:
-	# elasticsearch has a hardcoded version in the dockerfile - update that first!
+	# elasticsearch has a hardcoded version in the docker-compose.yml - update that first!
 
 .PHONY:
 update-all-containers: update-help fix-permissions
