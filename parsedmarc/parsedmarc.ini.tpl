@@ -4,8 +4,7 @@ save_forensic = True
 output = /output/
 
 [imap]
-# test mode, prevents report emails from being removed - needs to be removed in time
-test = True
+test = $ENABLE_TEST_MODE
 host = $MAIL_SERVER
 user = $MAIL_SERVER_USER
 password = $MAIL_SERVER_PASS

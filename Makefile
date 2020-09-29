@@ -7,6 +7,7 @@ MAIL_SERVER := $(shell cat secrets/mail_server.txt)
 MAIL_SERVER_USER := $(shell cat secrets/mail_server_user.txt)
 MAIL_SERVER_PASS := $(shell cat secrets/mail_server_pass.txt)
 DMARC_REPORT_TARGET_EMAIL := $(shell cat secrets/dmarc_report_target_email.txt)
+ENABLE_TEST_MODE := $(shell cat secrets/enable_test_mode.txt)
 
 # These should not need to change
 geoip_city_url := "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&account_id=$(MAXMIND_ACCOUNT_ID)&license_key=$(MAXMIND_LICENSE_KEY)&suffix=tar.gz"
@@ -57,6 +58,7 @@ update-parsedmarc: fix-permissions
 	# Updating parsedmarc.ini
 	MAIL_SERVER="$(MAIL_SERVER)" MAIL_SERVER_USER="$(MAIL_SERVER_USER)" \
 	MAIL_SERVER_PASS="$(MAIL_SERVER_PASS)" DMARC_REPORT_TARGET_EMAIL="$(DMARC_REPORT_TARGET_EMAIL)" \
+	ENABLE_TEST_MODE="$(ENABLE_TEST_MODE)" \
 		parsedmarc/template.py parsedmarc/parsedmarc.ini.tpl \
 		> parsedmarc/parsedmarc.ini
 	# recreate container
